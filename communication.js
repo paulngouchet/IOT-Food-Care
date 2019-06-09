@@ -43,7 +43,7 @@ setTimeout(function () {
 
 function read_hum()
 {
-request.get("https://us.wio.seeed.io/v1/node/GroveTempHumD0/humidity?access_token=ed70e04eede84c0e655ef4242f84c1a1",function(err,res,body){
+request.get("https://us.wio.seeed.io/v1/node/GroveTempHumD0/humidity?access_token=**************",function(err,res,body){
 
 
 
@@ -63,7 +63,7 @@ request.get("https://us.wio.seeed.io/v1/node/GroveTempHumD0/humidity?access_toke
 
 function read_temp()
 {
-request.get("https://us.wio.seeed.io/v1/node/GroveTempHumD0/temperature_f?access_token=ed70e04eede84c0e655ef4242f84c1a1",function(err,res,body){
+request.get("https://us.wio.seeed.io/v1/node/GroveTempHumD0/temperature_f?access_token=**********",function(err,res,body){
 
  var value = JSON.parse(body).fahrenheit_degree
 
@@ -87,7 +87,7 @@ text1 = value;
 function read_light()
 {
 
-request.get("https://us.wio.seeed.io/v1/node/GroveLuminanceA0/luminance?access_token=ed70e04eede84c0e655ef4242f84c1a1",function(err,res,body){
+request.get("https://us.wio.seeed.io/v1/node/GroveLuminanceA0/luminance?access_token=********",function(err,res,body){
 
 var value = JSON.parse(body).lux
   console.log(value)
