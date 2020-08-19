@@ -1,181 +1,143 @@
 <!DOCTYPE html>
 <html lang="en" >
-
-<head>
-  <meta charset="UTF-8">
-  <title>Product Management</title>
-
-
-  <link rel='stylesheet' href='https://cdnjs.com/libraries/10up-sanitize.css'>
-<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Space+Mono:400,700'>
-
-         <link rel="stylesheet" type="text/css" href="style.css" />
-
-
-</head>
-
-<body>
-
+  <head>
+    <meta charset="UTF-8">
+    <title>Product Management</title>
+    <link rel='stylesheet' href='https://cdnjs.com/libraries/10up-sanitize.css'>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Space+Mono:400,700'>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  
+  <body>
     <script src="/socket.io/socket.io.js"></script>
-
-
-<main>
-  <div class="phone">
-    <ul class="message-list" aria-label="A list of random messages from a simulated server, styled to resemble a smartphone." aria-live="polite" aria-relevant="additions"></ul>
-  </div>
-
-</main>
-
-<script>
-  var socket = io();
-</script>
-<script src="https://cdn.socket.io/socket.io-2.0.3.js"></script>
-<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-
+    <main>
+      <div class="phone">
+        <ul class="message-list" aria-label="A list of random messages from a simulated server, styled to resemble a smartphone." aria-live="polite" aria-relevant="additions"></ul>
+      </div>
+    </main>
+    
     <script>
-
+      var socket = io();
+    </script>
+    <script src="https://cdn.socket.io/socket.io-2.0.3.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
       //var socket = io();
-
-    const messages = [
-      'hey',
-      'heyy',
-      'heyyy',
-      "what's up?",
-      'you there??',
-      "how's it going?",
-      'so...',
-      'anybody home?',
-      'just checking in',
-      "what's going on?",
-      'you around?',
-      'let me know when you get this',
-      'did you get my message?',
-      'knock knock',
-      "Light level is 20",
-      'Temperature level is 60',
-      'Temperature level 100',
-      'Lower the temperature level',
-      'Lower The Heat Level'
-    ];
-
-
-
-    const messageList = document.querySelector('.message-list');
-
-    function randomMessage() {
-      const i = Math.floor(Math.random() * messages.length);  // update this function to get data from the sensors
-      return messages[i];
-    }
-
-    function buildMessage(message) {
-      const li = document.createElement('li');
-      li.classList.add('message');
-
-      const avatar = document.createElement('div');
-      avatar.classList.add('message__avatar');
-      avatar.setAttribute('aria-hidden', 'true');
-      avatar.appendChild(document.createTextNode('🖥️'));
-
-      const messageEl = document.createElement('div');
-      messageEl.classList.add('message__text');
-
-      const hiddenText = document.createElement('span');
-      hiddenText.classList.add('visually-hidden');
-      hiddenText.appendChild(document.createTextNode('Message from server: '));
-      messageEl.appendChild(hiddenText);
-      messageEl.appendChild(document.createTextNode(message));
-
-      li.appendChild(avatar);
-      li.appendChild(messageEl);
-
-      return li;
-    }
-
-    function scrollToBottom(animate) {
-      if (animate) {
-        const distance = messageList.scrollHeight - messageList.scrollTop;
-        const steps = 10;
-        const step = distance / steps;
-
-        for (let i = 0; i <= steps; i++) {
-          setTimeout(() => {
-            messageList.scrollTop = messageList.scrollTop + (i * step);
-          }, 50 * i);
+      const messages = [
+        'hey',
+        'heyy',
+        'heyyy',
+        "what's up?",
+        'you there??',
+        "how's it going?",
+        'so...',
+        'anybody home?',
+        'just checking in',
+        "what's going on?",
+        'you around?',
+        'let me know when you get this',
+        'did you get my message?',
+        'knock knock',
+        "Light level is 20",
+        'Temperature level is 60',
+        'Temperature level 100',
+        'Lower the temperature level',
+        'Lower The Heat Level'
+      ];
+      
+      const messageList = document.querySelector('.message-list');
+      
+      function randomMessage() {
+        const i = Math.floor(Math.random() * messages.length);  // update this function to get data from the sensors
+        return messages[i];
+      }
+      
+      function buildMessage(message) {
+        const li = document.createElement('li');
+        li.classList.add('message');
+        const avatar = document.createElement('div');
+        avatar.classList.add('message__avatar');
+        avatar.setAttribute('aria-hidden', 'true');
+        avatar.appendChild(document.createTextNode('🖥️'));
+        const messageEl = document.createElement('div');
+        messageEl.classList.add('message__text');
+        const hiddenText = document.createElement('span');
+        hiddenText.classList.add('visually-hidden');
+        hiddenText.appendChild(document.createTextNode('Message from server: '));
+        messageEl.appendChild(hiddenText);
+        messageEl.appendChild(document.createTextNode(message));
+        li.appendChild(avatar);
+        li.appendChild(messageEl);
+        return li;
+      }
+      
+      function scrollToBottom(animate) {
+        if (animate) {
+          const distance = messageList.scrollHeight - messageList.scrollTop;
+          const steps = 10;
+          const step = distance / steps;
+          for (let i = 0; i <= steps; i++) {
+            setTimeout(() => {
+              messageList.scrollTop = messageList.scrollTop + (i * step);
+            }, 50 * i);
+          }
+        }
+        else {
+          messageList.scrollTop = messageList.scrollHeight;
         }
       }
-      else {
-        messageList.scrollTop = messageList.scrollHeight;
+      
+      function showMessage(infinite) {
+        socket.emit('chat message', "0")
+        
+        socket.on('chat message', function(body) {
+          //alert('The server has a message for you: ' + body.data[0]);
+          const message = body.data;
+          
+          if(message[0] != null && message[1] != null && message[2] != null){
+            const message0 = "The humidity level is " + message[0];
+            const message1 = "The temperature level is " + message[1];
+            const message2 = "The light level is " + message[2];
+            messageList.appendChild(buildMessage(message0));
+            messageList.appendChild(buildMessage(message1));
+            messageList.appendChild(buildMessage(message2));
+            
+            if(message[0] > 40){
+              message_alert = "The humidity is too high ! Go check it out!"
+              messageList.appendChild(buildMessage(message_alert));
+            }      
+          }   
+        })
+        
+        //const message = randomMessage();
+        // messageList.appendChild(buildMessage(message));
+        scrollToBottom(infinite);
+        
+        if(infinite) {
+          const delay = Math.random() * 2000 + 2000;
+          setTimeout(() => showMessage(true), delay);
+        }
       }
-    }
-
-    function showMessage(infinite) {
-
-      socket.emit('chat message', "0")
-
-      socket.on('chat message', function(body) {
-       //alert('The server has a message for you: ' + body.data[0]);
-
-
-       const message = body.data;
-
-       if(message[0] != null && message[1] != null && message[2] != null)
-       {
-
-
-
-         const message0 = "The humidity level is " + message[0];
-         const message1 = "The temperature level is " + message[1];
-         const message2 = "The light level is " + message[2];
-
-
-
-       messageList.appendChild(buildMessage(message0));
-       messageList.appendChild(buildMessage(message1));
-       messageList.appendChild(buildMessage(message2));
-
-       if( message[0] > 40)
-       {
-         message_alert = "The humidity is too high ! Go check it out!"
-         messageList.appendChild(buildMessage(message_alert));
-
-       }
-
-     }
-
-   })
-   //const message = randomMessage();
-  // messageList.appendChild(buildMessage(message));
-      scrollToBottom(infinite);
-
-      if (infinite) {
-        const delay = Math.random() * 2000 + 2000;
-        setTimeout(() => showMessage(true), delay);
+      
+      const motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
+      function handleReduceMotionChanged() {
+        const animate = !motionQuery.matches;
+        if(animate) {
+          showMessage(true);
+        }
+        else {
+          showMessage(false);
+          showMessage(false);
+          showMessage(false);
+          showMessage(false);
+          showMessage(false);
+          showMessage(false);
+          showMessage(false);
+        }
       }
-    }
-
-    const motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
-    function handleReduceMotionChanged() {
-      const animate = !motionQuery.matches;
-      if (animate) {
-        showMessage(true);
-      }
-      else {
-        showMessage(false);
-        showMessage(false);
-        showMessage(false);
-        showMessage(false);
-        showMessage(false);
-        showMessage(false);
-        showMessage(false);
-      }
-    }
-    handleReduceMotionChanged();
-    motionQuery.addListener(handleReduceMotionChanged);
-</script>
-
-
-
-
-</body>
-
+      
+      handleReduceMotionChanged();
+      motionQuery.addListener(handleReduceMotionChanged);
+    </script>
+  </body>
 </html>
