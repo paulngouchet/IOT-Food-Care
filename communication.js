@@ -8,10 +8,10 @@ var text1;
 var text2;
 
 io.on('connection', function(socket) {
-  		console.log('a user connected');
-  		socket.on('disconnect', function() {});
-		//sp.write(Buffer([0x02]))
-  		socket.on('chat message', function(msg) {
+	console.log('a user connected');
+  	socket.on('disconnect', function() {});
+	//sp.write(Buffer([0x02]))
+  	socket.on('chat message', function(msg) {
 		setTimeout(read_hum, 100)
 		setTimeout(read_temp, 100)
 		setTimeout(read_light, 100)
@@ -26,7 +26,7 @@ io.on('connection', function(socket) {
 function read_hum(){
 	request.get("https://us.wio.seeed.io/v1/node/GroveTempHumD0/humidity?access_token=**************",function(err,res,body) {
 		var value = JSON.parse(body).humidity
-	 	console.log(value);
+		console.log(value);
 		text0 = value
 		return text0 ;
 	});
@@ -42,14 +42,13 @@ function read_temp() {
 }
 
 function read_light() {
-		request.get("https://us.wio.seeed.io/v1/node/GroveLuminanceA0/luminance?access_token=********",function(err,res,body){
+	request.get("https://us.wio.seeed.io/v1/node/GroveLuminanceA0/luminance?access_token=********",function(err,res,body){
 		var value = JSON.parse(body).lux
   		console.log(value)
 		//text2 = "The light level is " + value.toString() ;
 		text2 = value;
     		//return body["lux"]
 		return text2 ;
-
 	});
 }
 
